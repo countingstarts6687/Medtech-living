@@ -9,6 +9,8 @@ const brand = {
   blue: "#1A3D5F",
   blueSoft: "#4A6D8C",
   lightBlue: "#64B5F6",
+  mint: "#7BE0D1",
+  mintSoft: "#C7F3EC",
   white: "#FFFFFF",
   logoBlue: "#223E7D",
 };
@@ -47,12 +49,21 @@ function GlassPanel({ children, className = "" }) {
   return (
     <div
       className={cn(
-        "border border-white/10 bg-white/70 shadow-[0_24px_70px_-28px_rgba(11,31,51,0.38)] backdrop-blur-xl",
+        "relative overflow-hidden border border-white/14 bg-white/68 backdrop-blur-xl",
         className
       )}
-      style={{ boxShadow: "0 30px 80px -36px rgba(11,31,51,0.34)" }}
+      style={{
+        boxShadow: "0 26px 72px -34px rgba(11,31,51,0.24), inset 0 1px 0 rgba(255,255,255,0.38)",
+      }}
     >
-      {children}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.06) 42%, rgba(255,255,255,0.02) 100%)",
+        }}
+      />
+      <div className="relative">{children}</div>
     </div>
   );
 }
@@ -63,13 +74,15 @@ function Badge({ children, variant = "default", className = "", style = {}, ...p
     <span
       {...props}
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium tracking-[0.08em]",
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium tracking-[0.10em]",
         isOutline ? "text-slate-700" : "text-white",
         className
       )}
       style={{
-        borderColor: isOutline ? "rgba(26,61,95,0.14)" : "rgba(255,255,255,0.14)",
-        background: isOutline ? "rgba(255,255,255,0.88)" : "linear-gradient(135deg, #1A3D5F 0%, #0E2841 100%)",
+        borderColor: isOutline ? "rgba(26,61,95,0.12)" : "rgba(255,255,255,0.10)",
+        background: isOutline
+          ? "rgba(255,255,255,0.78)"
+          : "linear-gradient(135deg, rgba(26,61,95,0.96) 0%, rgba(14,40,65,0.98) 100%)",
         ...style,
       }}
     >
@@ -81,13 +94,20 @@ function Badge({ children, variant = "default", className = "", style = {}, ...p
 function Card({ children, className = "" }) {
   return (
     <div
-      className={cn("rounded-[28px] border", className)}
+      className={cn("relative overflow-hidden rounded-[30px] border bg-white/78 backdrop-blur-xl", className)}
       style={{
         borderColor: "rgba(26,61,95,0.10)",
-        boxShadow: "0 24px 60px -32px rgba(11,31,51,0.22)",
+        boxShadow: "0 24px 60px -34px rgba(11,31,51,0.18), inset 0 1px 0 rgba(255,255,255,0.42)",
       }}
     >
-      {children}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 46%, rgba(255,255,255,0.01) 100%)",
+        }}
+      />
+      <div className="relative">{children}</div>
     </div>
   );
 }
@@ -112,20 +132,35 @@ function SectionTitle({ eyebrow, title, description, dark = false }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <div className={cn("h-px w-10", dark ? "bg-slate-500" : "bg-slate-300")} />
+        <div
+          className="h-px w-14"
+          style={{
+            background: dark
+              ? "linear-gradient(90deg, rgba(100,181,246,0) 0%, rgba(100,181,246,0.75) 100%)"
+              : "linear-gradient(90deg, rgba(100,181,246,0) 0%, rgba(26,61,95,0.35) 100%)",
+          }}
+        />
         <Badge
           variant="outline"
-          className={cn("px-3 py-1", dark && "text-slate-100")}
-          style={dark ? { background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.14)", color: "#E2E8F0" } : {}}
+          className={cn("px-3.5 py-1.5", dark && "text-slate-100")}
+          style={
+            dark
+              ? {
+                  background: "rgba(255,255,255,0.08)",
+                  borderColor: "rgba(255,255,255,0.14)",
+                  color: "#E2E8F0",
+                }
+              : {}
+          }
         >
           {eyebrow}
         </Badge>
       </div>
       <div className="space-y-3">
-        <h2 className={cn("text-3xl font-semibold tracking-tight sm:text-4xl", dark ? "text-white" : "text-slate-950")}>
+        <h2 className={cn("text-[30px] font-semibold tracking-[-0.03em] sm:text-[40px]", dark ? "text-white" : "text-slate-950")}>
           {title}
         </h2>
-        <p className={cn("max-w-3xl text-sm leading-7 sm:text-base", dark ? "text-slate-300" : "text-slate-600")}>
+        <p className={cn("max-w-2xl text-sm leading-7 sm:text-[15px]", dark ? "text-slate-300" : "text-slate-600")}>
           {description}
         </p>
       </div>
@@ -138,19 +173,39 @@ function SectionShell({ id, children, dark = false, className = "" }) {
     <section
       id={id}
       className={cn(
-        "relative overflow-hidden rounded-[36px] border px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12",
+        "relative overflow-hidden rounded-[34px] border px-5 py-7 sm:px-8 sm:py-9 lg:px-10 lg:py-10",
         className
       )}
       style={{
         background: dark
-          ? "linear-gradient(135deg, rgba(9,26,43,0.98) 0%, rgba(14,40,65,0.96) 48%, rgba(26,61,95,0.94) 100%)"
-          : "linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(244,246,248,0.92) 100%)",
+          ? "linear-gradient(135deg, rgba(7,21,34,0.98) 0%, rgba(10,30,48,0.96) 48%, rgba(18,59,84,0.94) 100%)"
+          : "linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(248,251,253,0.76) 100%)",
         borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(26,61,95,0.10)",
-        boxShadow: dark ? "0 34px 90px -46px rgba(7,18,31,0.82)" : "0 26px 70px -42px rgba(11,31,51,0.22)",
+        boxShadow: dark
+          ? "0 34px 90px -46px rgba(7,18,31,0.72)"
+          : "0 26px 70px -42px rgba(11,31,51,0.18)",
       }}
     >
-      {dark && <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-sky-300/10 blur-3xl" />}
-      {!dark && <div className="pointer-events-none absolute -right-12 top-0 h-48 w-48 rounded-full bg-sky-200/40 blur-3xl" />}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: dark
+            ? "radial-gradient(circle at top right, rgba(123,224,209,0.12) 0%, rgba(123,224,209,0) 28%), radial-gradient(circle at 18% 18%, rgba(100,181,246,0.12) 0%, rgba(100,181,246,0) 26%), linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%)"
+            : "radial-gradient(circle at top right, rgba(100,181,246,0.18) 0%, rgba(100,181,246,0) 32%), linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.04) 100%)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{
+          background: dark
+            ? "linear-gradient(90deg, transparent 0%, rgba(100,181,246,0.65) 50%, transparent 100%)"
+            : "linear-gradient(90deg, transparent 0%, rgba(26,61,95,0.20) 50%, transparent 100%)",
+        }}
+      />
+      <div className="pointer-events-none absolute -right-10 top-6 h-32 w-32 rounded-full bg-sky-300/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-10 bottom-0 h-28 w-28 rounded-full bg-slate-200/40 blur-3xl" />
+      {dark && <div className="pointer-events-none absolute left-[10%] top-[18%] h-20 w-20 rounded-full border border-emerald-200/10" />}
+      {dark && <div className="pointer-events-none absolute right-[12%] bottom-[12%] h-16 w-16 rounded-full border border-sky-200/10" />}
       <div className="relative">{children}</div>
     </section>
   );
@@ -521,11 +576,50 @@ export default function OrbivaInteractiveBoardSite() {
   );
 
   return (
-    <div className="min-h-screen text-slate-950" style={{ background: "linear-gradient(180deg, #EEF3F8 0%, #F8FBFD 28%, #F3F6F9 100%)" }}>
+    <div
+      className="min-h-screen text-slate-950"
+      style={{
+        background:
+          "radial-gradient(circle at 10% 8%, rgba(123,224,209,0.24) 0%, rgba(123,224,209,0) 22%), radial-gradient(circle at 84% 10%, rgba(100,181,246,0.22) 0%, rgba(100,181,246,0) 26%), radial-gradient(circle at 52% 30%, rgba(199,243,236,0.18) 0%, rgba(199,243,236,0) 24%), linear-gradient(180deg, #E6F5F4 0%, #EDF6FB 26%, #E9F1F8 56%, #F3F7FB 100%)",
+      }}
+    >
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-20 top-0 h-[24rem] w-[24rem] rounded-full bg-sky-200/35 blur-3xl" />
-        <div className="absolute right-0 top-40 h-[30rem] w-[30rem] rounded-full bg-blue-100/35 blur-3xl" />
-        <div className="absolute bottom-0 left-1/3 h-[22rem] w-[22rem] rounded-full bg-slate-200/45 blur-3xl" />
+        <div className="absolute -left-24 top-[-3rem] h-[30rem] w-[30rem] rounded-full blur-3xl" style={{ background: "radial-gradient(circle, rgba(123,224,209,0.30) 0%, rgba(123,224,209,0) 68%)" }} />
+        <div className="absolute right-[-4rem] top-[1rem] h-[34rem] w-[34rem] rounded-full blur-3xl" style={{ background: "radial-gradient(circle, rgba(100,181,246,0.26) 0%, rgba(100,181,246,0) 72%)" }} />
+        <div className="absolute left-[30%] top-[28rem] h-[22rem] w-[22rem] rounded-full blur-3xl" style={{ background: "radial-gradient(circle, rgba(199,243,236,0.34) 0%, rgba(199,243,236,0) 72%)" }} />
+        <div className="absolute right-[10%] bottom-[-5rem] h-[26rem] w-[26rem] rounded-full blur-3xl" style={{ background: "radial-gradient(circle, rgba(74,109,140,0.18) 0%, rgba(74,109,140,0) 72%)" }} />
+        <div
+          className="absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(26,61,95,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(26,61,95,0.07) 1px, transparent 1px)",
+            backgroundSize: "68px 68px",
+            maskImage: "linear-gradient(180deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.18) 46%, rgba(0,0,0,0) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 top-[7rem] h-[16rem] opacity-[0.16]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 10px 10px, rgba(14,40,65,0.20) 2px, transparent 2.5px)",
+            backgroundSize: "34px 34px",
+            maskImage: "linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.82) 18%, rgba(0,0,0,0.82) 82%, transparent 100%)",
+          }}
+        />
+        <div className="absolute right-[8%] top-[6rem] h-[16rem] w-[16rem] rounded-full border border-sky-300/22" />
+        <div className="absolute right-[10%] top-[8rem] h-[12rem] w-[12rem] rounded-full border border-emerald-200/24" />
+        <div className="absolute right-[13%] top-[11rem] h-[6rem] w-[6rem] rounded-full border border-white/25 bg-white/8 backdrop-blur-sm" />
+        <div className="absolute right-[25%] top-[11rem] h-3 w-3 rounded-full bg-emerald-300/85 shadow-[0_0_22px_rgba(123,224,209,0.9)]" />
+        <div className="absolute right-[7%] top-[18rem] h-2.5 w-2.5 rounded-full bg-sky-300/80 shadow-[0_0_18px_rgba(100,181,246,0.95)]" />
+        <div
+          className="absolute left-[6%] top-[17rem] h-[6rem] w-[22rem] opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='120' viewBox='0 0 520 120'%3E%3Cpath d='M0 70h82l18-26 22 48 30-62 24 38h344' fill='none' stroke='%231A3D5F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+          }}
+        />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 pb-16 pt-5 sm:px-6 lg:px-8">
@@ -553,59 +647,77 @@ export default function OrbivaInteractiveBoardSite() {
           </div>
         </GlassPanel>
 
-        <main className="space-y-10 pt-8 lg:pt-10">
-          <section className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
-            <div
-              className="relative overflow-hidden rounded-[36px] border p-7 sm:p-8 lg:p-10"
-              style={{
-                background: "linear-gradient(135deg, rgba(9,26,43,0.98) 0%, rgba(14,40,65,0.97) 54%, rgba(26,61,95,0.94) 100%)",
-                borderColor: "rgba(255,255,255,0.08)",
-                boxShadow: "0 36px 100px -44px rgba(7,18,31,0.88)",
-              }}
-            >
-              <div className="absolute -right-12 top-0 h-44 w-44 rounded-full bg-sky-300/12 blur-3xl" />
-              <div className="absolute -bottom-10 left-10 h-40 w-40 rounded-full bg-white/5 blur-3xl" />
-              <div className="relative space-y-7">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge>2026 全球业务推进方案</Badge>
-                  <Badge variant="outline" style={{ borderColor: "rgba(255,255,255,0.18)", background: "rgba(255,255,255,0.08)", color: "#FFFFFF" }}>Board / Investor Style</Badge>
-                  <Badge variant="outline" style={{ borderColor: "rgba(255,255,255,0.18)", background: "rgba(255,255,255,0.08)", color: "#FFFFFF" }}>HealthTech Infrastructure</Badge>
+        <main className="space-y-6 pt-6 lg:pt-8">
+          <section className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+            <div className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(135deg,rgba(7,18,31,0.98)_0%,rgba(12,32,52,0.96)_58%,rgba(22,56,91,0.93)_100%)] p-7 shadow-[0_38px_100px_-46px_rgba(7,18,31,0.86)] sm:p-8 lg:p-10">
+              <div className="absolute inset-0 opacity-90" style={{ background: "radial-gradient(circle at 14% 16%, rgba(123,224,209,0.20) 0%, rgba(123,224,209,0) 24%), radial-gradient(circle at 84% 20%, rgba(100,181,246,0.20) 0%, rgba(100,181,246,0) 20%), radial-gradient(circle at 70% 72%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 18%)" }} />
+              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(100,181,246,0.8),transparent)]" />
+              <div className="absolute right-[-2rem] top-[3.5rem] hidden h-[20rem] w-[20rem] lg:block" aria-hidden="true">
+                <div className="absolute inset-0 rounded-full border border-white/10" />
+                <div className="absolute inset-[1.4rem] rounded-full border border-emerald-200/16" />
+                <div className="absolute inset-[3.1rem] rounded-full border border-sky-200/18" />
+                <div className="absolute left-[50%] top-[50%] h-[4.8rem] w-[4.8rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/18 bg-white/8 backdrop-blur-sm" />
+                <div className="absolute left-[50%] top-[2rem] h-3 w-3 -translate-x-1/2 rounded-full bg-emerald-300 shadow-[0_0_22px_rgba(123,224,209,0.85)]" />
+                <div className="absolute right-[2.5rem] top-[50%] h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-sky-300 shadow-[0_0_20px_rgba(100,181,246,0.95)]" />
+                <div className="absolute bottom-[2.4rem] left-[28%] h-2.5 w-2.5 rounded-full bg-white/70 shadow-[0_0_16px_rgba(255,255,255,0.65)]" />
+                <div className="absolute left-[2rem] top-[54%] h-[4.8rem] w-[8rem] rounded-[20px] border border-white/12 bg-white/8 backdrop-blur-md" />
+                <div className="absolute left-[2.8rem] top-[5rem] h-[3.8rem] w-[7.2rem] rounded-[18px] border border-white/10 bg-white/6 backdrop-blur-md" />
+                <div className="absolute left-[2.95rem] top-[5.8rem] h-[0.42rem] w-[4.3rem] rounded-full bg-emerald-200/80" />
+                <div className="absolute left-[2.95rem] top-[6.75rem] h-[0.35rem] w-[2.6rem] rounded-full bg-white/55" />
+                <div className="absolute left-[2.95rem] top-[7.5rem] h-[0.35rem] w-[3.4rem] rounded-full bg-sky-200/55" />
+                <div className="absolute left-[2.7rem] top-[54.9%] h-[0.4rem] w-[4.8rem] rounded-full bg-sky-200/70" />
+                <div className="absolute left-[2.7rem] top-[57.2%] h-[0.35rem] w-[2.8rem] rounded-full bg-white/55" />
+                <div className="absolute left-[2.7rem] top-[59.1%] h-[0.35rem] w-[5.6rem] rounded-full bg-emerald-200/55" />
+              </div>
+
+              <div className="relative flex h-full flex-col justify-between gap-8">
+                <div className="space-y-6 text-white">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge>2026 全球业务推进方案</Badge>
+                    <Badge variant="outline" style={{ borderColor: "rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.08)", color: "#FFFFFF" }}>Interactive Board</Badge>
+                    <Badge variant="outline" style={{ borderColor: "rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.08)", color: "#FFFFFF" }}>HealthTech Brand Site</Badge>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="inline-flex rounded-[24px] border border-white/10 bg-white/92 px-4 py-3 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.48)]">
+                      <BrandLogo className="gap-0" textClassName="text-[40px] sm:text-[50px]" withTagline />
+                    </div>
+                    <div className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-[15px]">
+                      点击下方板块可直接进入相应章节。
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      <Badge variant="outline" style={{ borderColor: "rgba(123,224,209,0.24)", background: "rgba(123,224,209,0.12)", color: "#E6FFFB" }}>Home Health</Badge>
+                      <Badge variant="outline" style={{ borderColor: "rgba(100,181,246,0.22)", background: "rgba(100,181,246,0.10)", color: "#EAF6FF" }}>Medical AI</Badge>
+                      <Badge variant="outline" style={{ borderColor: "rgba(255,255,255,0.16)", background: "rgba(255,255,255,0.08)", color: "#F8FAFC" }}>AIoT Ecosystem</Badge>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="space-y-5 text-white">
-                  <div className="inline-flex rounded-[22px] bg-white/92 px-4 py-3 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.55)]">
-                    <BrandLogo className="gap-0" textClassName="text-[40px] sm:text-[48px]" withTagline />
-                  </div>
-                  <div className="max-w-3xl text-sm leading-7 text-slate-300">
-                    <div className="text-xs uppercase tracking-[0.2em] text-sky-100/70">Contents</div>
-                    <div className="mt-2 text-base text-slate-200">点击对应板块可直接跳转到网页中的相应章节。</div>
-                  </div>
-                </div>
-
-                <div className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
                   {sectionLinks.map(([target, label], index) => (
                     <button
                       key={target}
                       type="button"
                       onClick={() => document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                      className="group flex w-full items-center justify-between rounded-[20px] border px-4 py-4 text-left transition sm:px-5"
+                      className="group flex items-center justify-between rounded-[20px] border px-4 py-4 text-left transition"
                       style={{
-                        background: index === 0
-                          ? "linear-gradient(180deg, rgba(227,242,245,0.95) 0%, rgba(208,231,234,0.92) 100%)"
-                          : "linear-gradient(180deg, rgba(241,248,249,0.92) 0%, rgba(226,238,240,0.88) 100%)",
-                        borderColor: "rgba(255,255,255,0.16)",
-                        boxShadow: "0 12px 28px -20px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.18)",
+                        background:
+                          index === 0
+                            ? "linear-gradient(180deg, rgba(224,242,245,0.95) 0%, rgba(203,230,235,0.90) 100%)"
+                            : "linear-gradient(180deg, rgba(245,250,251,0.18) 0%, rgba(255,255,255,0.10) 100%)",
+                        borderColor: index === 0 ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.10)",
+                        boxShadow: index === 0 ? "0 18px 30px -22px rgba(0,0,0,0.42)" : "inset 0 1px 0 rgba(255,255,255,0.12)",
                       }}
                     >
                       <div className="flex min-w-0 items-center gap-4">
-                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold tracking-[0.12em]" style={{ color: "#0A6C72", background: "rgba(255,255,255,0.68)" }}>
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold tracking-[0.14em]" style={{ color: index === 0 ? "#0A6C72" : "#E2E8F0", background: index === 0 ? "rgba(255,255,255,0.68)" : "rgba(255,255,255,0.10)" }}>
                           {String(index + 1).padStart(2, "0")}
                         </div>
-                        <div className="min-w-0 truncate text-[18px] font-medium tracking-[0.01em] text-[#066970] sm:text-[20px]">
+                        <div className={cn("min-w-0 text-[15px] font-medium leading-6 sm:text-[16px]", index === 0 ? "text-[#066970]" : "text-white")}>
                           {label}
                         </div>
                       </div>
-                      <div className="ml-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg transition group-hover:translate-x-0.5" style={{ color: "#0A6C72", background: "rgba(255,255,255,0.52)" }}>
+                      <div className={cn("ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-lg transition group-hover:translate-x-0.5", index === 0 ? "text-[#066970]" : "text-slate-200")} style={{ background: index === 0 ? "rgba(255,255,255,0.52)" : "rgba(255,255,255,0.10)" }}>
                         ›
                       </div>
                     </button>
@@ -614,22 +726,23 @@ export default function OrbivaInteractiveBoardSite() {
               </div>
             </div>
 
-            <GlassPanel className="rounded-[36px] p-4 sm:p-5 lg:p-6">
-              <div className="mb-5 flex items-center justify-between">
-                <div>
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key Indicators</div>
-                  <div className="mt-1 text-lg font-semibold text-slate-950">品牌化数据入口</div>
+            <div className="grid gap-5">
+              <GlassPanel className="rounded-[32px] p-5 sm:p-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <div>
+                    <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key Indicators</div>
+                    <div className="mt-1 text-lg font-semibold text-slate-950">HealthTech Board View</div>
+                  </div>
+                  <Badge variant="outline">Live Snapshot</Badge>
                 </div>
-                <div className="rounded-full px-3 py-1 text-xs text-slate-600" style={{ background: "rgba(100,181,246,0.12)" }}>
-                  HealthTech Board View
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {heroStats.map((item) => (
+                    <StatCard key={item.label} {...item} />
+                  ))}
                 </div>
+              </GlassPanel>
+
               </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {heroStats.map((item) => (
-                  <StatCard key={item.label} {...item} />
-                ))}
-              </div>
-            </GlassPanel>
           </section>
 
           <SectionShell id="overview">
@@ -1292,15 +1405,15 @@ export default function OrbivaInteractiveBoardSite() {
 
               <div className="grid gap-5 lg:grid-cols-3">
                 {geoCards.map((item) => (
-                  <Card key={item.city} className="h-full border-white/10 bg-white/6 text-white">
+                  <Card key={item.city} className="h-full bg-white/90 text-slate-950">
                     <CardHeader>
-                      <CardTitle className="text-2xl">{item.city}</CardTitle>
-                      <CardDescription className="text-sm leading-7 text-slate-300">{item.role}</CardDescription>
+                      <CardTitle className="text-2xl text-slate-950">{item.city}</CardTitle>
+                      <CardDescription className="text-sm leading-7 text-slate-600">{item.role}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3 px-6 pb-6">
                       {item.bullets.map((bullet) => (
-                        <div key={bullet} className="flex gap-3 rounded-[20px] border border-white/10 bg-white/6 p-3 text-sm leading-7 text-slate-200">
-                          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-sky-300" />
+                        <div key={bullet} className="flex gap-3 rounded-[20px] border border-slate-200 bg-slate-50 p-3 text-sm leading-7 text-slate-700">
+                          <div className="mt-2 h-2.5 w-2.5 rounded-full bg-sky-500" />
                           <div>{bullet}</div>
                         </div>
                       ))}
@@ -1309,83 +1422,81 @@ export default function OrbivaInteractiveBoardSite() {
                 ))}
               </div>
 
-              <Card className="border-white/10 bg-white/6 text-white">
+              <Card className="bg-white/90 text-slate-950">
                 <CardHeader>
-                  <CardTitle className="text-2xl">三地协同价值网络</CardTitle>
-                  <CardDescription className="text-sm leading-7 text-slate-300">三地形成“资本—制造—市场”黄金三角，充分发挥各区域比较优势。</CardDescription>
+                  <CardTitle className="text-2xl text-slate-950">三地协同价值网络</CardTitle>
+                  <CardDescription className="text-sm leading-7 text-slate-600">三地形成“资本—制造—市场”黄金三角，充分发挥各区域比较优势。</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4 px-6 pb-6 lg:grid-cols-3">
                   {geoSynergy.map((item) => (
-                    <div key={item.title} className="rounded-[22px] border border-white/10 bg-white/6 p-4">
-                      <div className="text-lg font-semibold text-white">{item.title}</div>
-                      <p className="mt-2 text-sm leading-7 text-slate-300">{item.body}</p>
+                    <div key={item.title} className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
+                      <div className="text-lg font-semibold text-slate-950">{item.title}</div>
+                      <p className="mt-2 text-sm leading-7 text-slate-600">{item.body}</p>
                     </div>
                   ))}
                 </CardContent>
               </Card>
 
               <div className="grid gap-5 lg:grid-cols-[1.02fr_0.98fr]">
-                <Card className="border-white/10 bg-white/6 text-white">
+                <Card className="bg-white/90 text-slate-950">
                   <CardHeader>
-                    <CardTitle className="text-2xl">预算规划</CardTitle>
-                    <CardDescription className="text-sm leading-7 text-slate-300">按香港、新加坡、深圳三地分别配置战略资源。</CardDescription>
+                    <CardTitle className="text-2xl text-slate-950">预算规划</CardTitle>
+                    <CardDescription className="text-sm leading-7 text-slate-600">按香港、新加坡、深圳三地分别配置战略资源。</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3 px-6 pb-6">
                     {entityBudgets.map((entity, index) => (
-                      <details key={entity.city} className="group rounded-[22px] border border-white/10 bg-white/6 px-4 py-3" open={index === 0}>
+                      <details key={entity.city} className="group rounded-[22px] border border-slate-200 bg-slate-50 px-4 py-3" open={index === 0}>
                         <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
                           <div>
-                            <div className="text-lg font-semibold text-white">{entity.city}</div>
-                            <div className="text-sm text-slate-300">{entity.role} · {entity.people}</div>
+                            <div className="text-lg font-semibold text-slate-950">{entity.city}</div>
+                            <div className="text-sm text-slate-500">{entity.role} · {entity.people}</div>
                           </div>
                           <div className="flex items-center gap-3">
-                            <Badge variant="outline" style={{ background: "rgba(255,255,255,0.08)", borderColor: "rgba(255,255,255,0.14)", color: "#E2E8F0" }}>
-                              {entity.total}
-                            </Badge>
+                            <Badge variant="outline">{entity.total}</Badge>
                             <span className="text-slate-400 transition group-open:rotate-90">›</span>
                           </div>
                         </summary>
                         <div className="mt-4 grid gap-3 sm:grid-cols-2">
                           {entity.items.map(([label, value]) => (
-                            <div key={label} className="rounded-[18px] border border-white/10 bg-white/6 px-3 py-3 text-sm text-slate-200">
-                              <div className="text-slate-300">{label}</div>
-                              <div className="mt-1 text-base font-semibold text-white">{value}</div>
+                            <div key={label} className="rounded-[18px] border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700">
+                              <div className="text-slate-500">{label}</div>
+                              <div className="mt-1 text-base font-semibold text-slate-950">{value}</div>
                             </div>
                           ))}
                         </div>
-                        <p className="mt-4 text-sm leading-7 text-slate-300">{entity.note}</p>
+                        <p className="mt-4 text-sm leading-7 text-slate-600">{entity.note}</p>
                       </details>
                     ))}
                   </CardContent>
                 </Card>
 
                 <div className="space-y-5">
-                  <Card className="border-white/10 bg-white/6 text-white">
+                  <Card className="bg-white/90 text-slate-950">
                     <CardHeader>
-                      <CardTitle className="text-2xl">投入框架</CardTitle>
+                      <CardTitle className="text-2xl text-slate-950">投入框架</CardTitle>
                     </CardHeader>
                     <CardContent className="grid gap-3 px-6 pb-6 sm:grid-cols-3">
                       {budgetHighlights.map((item) => (
-                        <div key={item.label} className="rounded-[20px] border border-white/10 bg-white/6 p-4 text-center">
-                          <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{item.label}</div>
-                          <div className="mt-2 text-xl font-semibold text-white">{item.value}</div>
-                          <div className="mt-1 text-sm text-slate-300">{item.note}</div>
+                        <div key={item.label} className="rounded-[20px] border border-slate-200 bg-slate-50 p-4 text-center">
+                          <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{item.label}</div>
+                          <div className="mt-2 text-xl font-semibold text-slate-950">{item.value}</div>
+                          <div className="mt-1 text-sm text-slate-600">{item.note}</div>
                         </div>
                       ))}
                     </CardContent>
                   </Card>
 
-                  <Card className="border-white/10 bg-white/6 text-white">
+                  <Card className="bg-white/90 text-slate-950">
                     <CardHeader>
-                      <CardTitle className="text-2xl">目标产出</CardTitle>
+                      <CardTitle className="text-2xl text-slate-950">目标产出</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3 px-6 pb-6">
                       {outputTargets.map((item) => (
-                        <div key={item} className="rounded-[18px] border border-white/10 bg-white/6 px-4 py-3 text-sm text-slate-200">
+                        <div key={item} className="rounded-[18px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
                           {item}
                         </div>
                       ))}
-                      <div className="rounded-[18px] border border-white/10 bg-white/6 px-4 py-3 text-sm leading-7 text-slate-300">
+                      <div className="rounded-[18px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-7 text-slate-600">
                         AI 投资更像一份战略期权：放弃意味着永久错过牌桌，投入则锁定未来参与行业变革的可能性。
                       </div>
                     </CardContent>
@@ -1393,45 +1504,45 @@ export default function OrbivaInteractiveBoardSite() {
                 </div>
               </div>
 
-              <Card className="border-white/10 bg-white/6 text-white">
+              <Card className="bg-white/90 text-slate-950">
                 <CardHeader>
-                  <CardTitle className="text-2xl">供应链套利逻辑：HomeCare 板块核心优势</CardTitle>
-                  <CardDescription className="text-sm leading-7 text-slate-300">构建“低成本采购 → 高附加值组装 → 品牌溢价销售”的供应链套利闭环。</CardDescription>
+                  <CardTitle className="text-2xl text-slate-950">供应链套利逻辑：HomeCare 板块核心优势</CardTitle>
+                  <CardDescription className="text-sm leading-7 text-slate-600">构建“低成本采购 → 高附加值组装 → 品牌溢价销售”的供应链套利闭环。</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4 px-6 pb-6 lg:grid-cols-3">
                   {supplyChainFlow.map((item) => (
-                    <div key={item.title} className="rounded-[24px] border border-white/10 bg-white/6 p-5">
-                      <div className="text-xs uppercase tracking-[0.18em] text-sky-100/65">{item.subtitle}</div>
-                      <div className="mt-2 text-xl font-medium">{item.title}</div>
-                      <p className="mt-4 text-sm leading-7 text-slate-200">{item.desc}</p>
+                    <div key={item.title} className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">{item.subtitle}</div>
+                      <div className="mt-2 text-xl font-medium text-slate-950">{item.title}</div>
+                      <p className="mt-4 text-sm leading-7 text-slate-600">{item.desc}</p>
                     </div>
                   ))}
                 </CardContent>
               </Card>
 
               <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
-                <Card className="border-white/10 bg-white/6 text-white">
+                <Card className="bg-white/90 text-slate-950">
                   <CardHeader>
-                    <CardTitle className="text-2xl">更新：深圳子公司设立</CardTitle>
-                    <CardDescription className="text-sm leading-7 text-slate-300">战略定位：Orbiva 的核心供应链与工程枢纽</CardDescription>
+                    <CardTitle className="text-2xl text-slate-950">更新：深圳子公司设立</CardTitle>
+                    <CardDescription className="text-sm leading-7 text-slate-600">战略定位：Orbiva 的核心供应链与工程枢纽</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3 px-6 pb-6">
                     {shenzhenReasons.map((item, index) => (
-                      <details key={item.title} className="group rounded-[20px] border border-white/10 bg-white/6 px-4 py-3" open={index === 0}>
-                        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-white">
+                      <details key={item.title} className="group rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3" open={index === 0}>
+                        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-slate-950">
                           <span>{item.title}</span>
                           <span className="text-slate-400 transition group-open:rotate-90">›</span>
                         </summary>
-                        <p className="mt-3 text-sm leading-7 text-slate-300">{item.body}</p>
+                        <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
                       </details>
                     ))}
-                    <div className="rounded-[22px] border border-white/10 bg-white/6 p-4">
-                      <div className="text-sm font-semibold text-white">Basic Information</div>
+                    <div className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
+                      <div className="text-sm font-semibold text-slate-950">Basic Information</div>
                       <div className="mt-3 grid gap-2">
                         {shenzhenUpdate.map(([label, value]) => (
-                          <div key={label} className="grid gap-1 rounded-[16px] bg-white/6 px-3 py-2 text-sm sm:grid-cols-[120px_1fr] sm:items-center">
-                            <div className="text-slate-400">{label}</div>
-                            <div className="text-slate-200">{value}</div>
+                          <div key={label} className="grid gap-1 rounded-[16px] bg-white px-3 py-2 text-sm sm:grid-cols-[120px_1fr] sm:items-center">
+                            <div className="text-slate-500">{label}</div>
+                            <div className="text-slate-700">{value}</div>
                           </div>
                         ))}
                       </div>
@@ -1439,26 +1550,26 @@ export default function OrbivaInteractiveBoardSite() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-white/10 bg-white/6 text-white">
+                <Card className="bg-white/90 text-slate-950">
                   <CardHeader>
-                    <CardTitle className="text-2xl">新加坡主体的战略意义</CardTitle>
-                    <CardDescription className="text-sm leading-7 text-slate-300">高优先级议题：该主体是所有东南亚业务的法律前提，也是 2026 年业务开展的关键步骤。</CardDescription>
+                    <CardTitle className="text-2xl text-slate-950">新加坡主体的战略意义</CardTitle>
+                    <CardDescription className="text-sm leading-7 text-slate-600">高优先级议题：该主体是所有东南亚业务的法律前提，也是 2026 年业务开展的关键步骤。</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3 px-6 pb-6">
                     {singaporeImportance.map((item, index) => (
-                      <details key={item.title} className="group rounded-[20px] border border-white/10 bg-white/6 px-4 py-3" open={index === 0}>
-                        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-white">
+                      <details key={item.title} className="group rounded-[20px] border border-slate-200 bg-slate-50 px-4 py-3" open={index === 0}>
+                        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-slate-950">
                           <span>{item.title}</span>
                           <span className="text-slate-400 transition group-open:rotate-90">›</span>
                         </summary>
-                        <p className="mt-3 text-sm leading-7 text-slate-300">{item.body}</p>
+                        <p className="mt-3 text-sm leading-7 text-slate-600">{item.body}</p>
                       </details>
                     ))}
-                    <div className="rounded-[22px] border border-white/10 bg-white/6 p-4">
-                      <div className="text-sm font-semibold text-white">关键时间节点</div>
+                    <div className="rounded-[22px] border border-slate-200 bg-slate-50 p-4">
+                      <div className="text-sm font-semibold text-slate-950">关键时间节点</div>
                       <div className="mt-3 grid gap-2 sm:grid-cols-4">
                         {singaporeTimeline.map((item) => (
-                          <div key={item} className="rounded-[16px] bg-white/6 px-3 py-3 text-center text-sm text-slate-200">
+                          <div key={item} className="rounded-[16px] bg-white px-3 py-3 text-center text-sm text-slate-700">
                             {item}
                           </div>
                         ))}
@@ -1472,7 +1583,7 @@ export default function OrbivaInteractiveBoardSite() {
 
           <SectionShell id="execution">
             <div className="space-y-6">
-              <SectionTitle eyebrow="PART 05" title="2026 执行计划" description="按季度查看全年推进节奏，并同步浏览风险与 2027 Q1 展望。" />
+              <SectionTitle eyebrow="PART 05" title="2026 执行计划" description="按季度查看全年推进节奏，并同步展示 2027 Q1 展望。" />
 
               <div className="grid gap-3 sm:grid-cols-4">
                 {executionPhases.map((phase) => {
@@ -1534,7 +1645,8 @@ export default function OrbivaInteractiveBoardSite() {
                 </Card>
 
                 <div className="space-y-5">
-                  <Card className="bg-white/92">
+                  <Card className="bg-white/92 overflow-hidden">
+                    <div className="h-1.5 w-full" style={{ background: "linear-gradient(90deg, rgba(123,224,209,0.95) 0%, rgba(100,181,246,0.92) 56%, rgba(26,61,95,0.96) 100%)" }} />
                     <CardHeader>
                       <CardTitle className="text-xl text-slate-950">2027 Q1 展望</CardTitle>
                       <CardDescription className="text-sm leading-7 text-slate-500">从产品启动切换到平台与服务变现。</CardDescription>
@@ -1545,77 +1657,21 @@ export default function OrbivaInteractiveBoardSite() {
                         ["AI 硬件", executionOutlook.hardware],
                         ["公司层面", executionOutlook.company],
                       ].map(([title, body], index) => (
-                        <div key={title} className="rounded-[20px] border p-4" style={{ borderColor: "rgba(26,61,95,0.10)", background: index === 0 ? "rgba(100,181,246,0.10)" : "rgba(248,250,252,0.96)" }}>
+                        <div
+                          key={title}
+                          className="rounded-[20px] border p-4"
+                          style={{
+                            borderColor: "rgba(26,61,95,0.10)",
+                            background:
+                              index === 0
+                                ? "linear-gradient(180deg, rgba(123,224,209,0.14) 0%, rgba(100,181,246,0.08) 100%)"
+                                : "rgba(248,250,252,0.96)",
+                          }}
+                        >
                           <div className="text-sm font-semibold text-slate-950">{title}</div>
                           <p className="mt-2 text-sm leading-7 text-slate-600">{body}</p>
                         </div>
                       ))}
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white/92">
-                    <CardHeader>
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                          <CardTitle className="text-xl text-slate-950">风险面板</CardTitle>
-                          <CardDescription className="mt-2 text-sm leading-7 text-slate-500">过滤查看不同等级风险，并展开对应应对策略。</CardDescription>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {[
-                            ["全部", riskItems.length],
-                            ["高", riskItems.filter((item) => item.level === "高").length],
-                            ["中", riskItems.filter((item) => item.level === "中").length],
-                            ["低", riskItems.filter((item) => item.level === "低").length],
-                          ].map(([label, count]) => {
-                            const isActive = activeRiskLevel === label;
-                            return (
-                              <button
-                                key={label}
-                                type="button"
-                                onClick={() => setActiveRiskLevel(label)}
-                                className="rounded-full px-3 py-2 text-sm transition"
-                                style={{
-                                  color: isActive ? brand.white : brand.blue,
-                                  background: isActive ? "linear-gradient(135deg, #1A3D5F 0%, #0E2841 100%)" : "rgba(248,250,252,0.96)",
-                                }}
-                              >
-                                {label}（{count}）
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3 px-6 pb-6">
-                      {filteredRisks.map((item, index) => {
-                        const levelStyle =
-                          item.level === "高"
-                            ? { bg: "rgba(239,68,68,0.10)", bd: "rgba(248,113,113,0.18)", tag: "text-red-900" }
-                            : item.level === "中"
-                              ? { bg: "rgba(245,158,11,0.10)", bd: "rgba(251,191,36,0.18)", tag: "text-amber-900" }
-                              : { bg: "rgba(100,116,139,0.10)", bd: "rgba(148,163,184,0.18)", tag: "text-slate-700" };
-                        return (
-                          <details key={item.title} className="group rounded-[20px] border px-4 py-3" style={{ background: levelStyle.bg, borderColor: levelStyle.bd }} open={index === 0}>
-                            <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
-                              <div className="flex items-center gap-3">
-                                <Badge variant="outline" className={levelStyle.tag}>{item.level}风险</Badge>
-                                <div className="text-sm font-semibold text-slate-950">{item.title}</div>
-                              </div>
-                              <span className="text-slate-400 transition group-open:rotate-90">›</span>
-                            </summary>
-                            <div className="mt-4 grid gap-3">
-                              <div className="rounded-[16px] bg-white px-4 py-3">
-                                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">具体表现</div>
-                                <p className="mt-2 text-sm leading-7 text-slate-600">{item.symptom}</p>
-                              </div>
-                              <div className="rounded-[16px] bg-white px-4 py-3">
-                                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">应对策略</div>
-                                <p className="mt-2 text-sm leading-7 text-slate-600">{item.response}</p>
-                              </div>
-                            </div>
-                          </details>
-                        );
-                      })}
                     </CardContent>
                   </Card>
                 </div>
